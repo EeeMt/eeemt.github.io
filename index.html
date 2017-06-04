@@ -350,50 +350,16 @@
 
       
         
-          
-            <h5 id="什么是emacIDEAs"><a href="#什么是emacIDEAs" class="headerlink" title="什么是emacIDEAs"></a>什么是<code>emacIDEAs</code></h5><p><code>emacIDEAs</code>是<code>Intellij idea</code> 的一个小插件，功能是通过自定义快捷键达到移动光标、复制、粘贴、移动、删除等等。我使用它是因为它的移动光标很炫酷，移动光标的这部分功能叫 <code>AceJump</code> 。</p>
+          <h5 id="什么是emacIDEAs"><a href="#什么是emacIDEAs" class="headerlink" title="什么是emacIDEAs"></a>什么是<code>emacIDEAs</code></h5><p><code>emacIDEAs</code>是<code>Intellij idea</code> 的一个小插件，功能是通过自定义快捷键达到移动光标、复制、粘贴、移动、删除等等。我使用它是因为它的移动光标很炫酷，移动光标的这部分功能叫 <code>AceJump</code> 。</p>
 <p> <code>AceJump</code> 的使用是：想要光标移动到某个位置，用快捷键激活插件（我设定的是<code>ALT</code>+<code>M</code>） ，然后按下目的位置的字符，屏幕上会标记所有该字母出现的位置，然后输入目标位置的标记就能将光标移动到目的地。引用作者的动态图：<img src="../image/post-04-01_basic_word_jump.gif" alt="post-04-01_basic_word_jump"></p>
 <p>插件设定的是光标移动到字符前面，很不符合我的习惯，我想要光标移动到目的字符的后面。</p>
-<h5 id="修改插件的过程"><a href="#修改插件的过程" class="headerlink" title="修改插件的过程"></a>修改插件的过程</h5><p>从<a href="https://github.com/whunmr/emacsIDEAs" target="_blank" rel="external">官网</a> <code>clone</code> 到本地，没开发过 <code>Intellij</code> 插件，从网上找了几篇 <code>Intellij</code> 插件开发的入门教程看了看。大概过程如下：</p>
-<ul>
-<li><p>配置SDK</p>
-<p><img src="../image/post-04-02.png" alt="post-04-02"></p>
-<p>就是图中的 <code>Intellij IDEA IU-171.4424.56</code> 后面的数字是版本号，对应不同版本的 <code>IDEA</code> ，下拉框里没有的话就点击旁边的<code>NEW</code> 然后第二项 <code>Intellij Platform Plugin SDK</code> ，再弹出的目录选择窗口中选择 <code>Intellij IDEA</code> 的根目录。</p>
-</li>
-<li><p>项目有个 <code>letedit.propertier</code> 的配置文件，分别是<code>maven</code>的仓库目录和<code>SDK</code>目录，如下图，第一行<code>maven</code>仓库的配置其实没有用上，灰色的。 <img src="../image/post-04-03.png" alt="post-04-03"></p>
-</li>
-<li><p>打包的相关配置，项目设置里的<code>Artifacts</code> 如图，打包为<code>jar</code>包</p>
-<p><img src="../image/post-04-04.png" alt="post-04-04"></p>
-<p> 在弹出框中直接点 <code>OK</code> 就行，<code>Main Class</code>  不用选择，插件是用快捷键启动的。</p>
-<p><img src="../image/post-04-05.png" alt="post-04-02"></p>
-</li>
-<li><p>上一步完了之后是配置 <code>META-INF</code> ，上一步点了<code>ok</code> 应该就会提示你添加<code>META-INF</code></p>
-<p><img src="../image/post-04-06.png" alt="post-04-06"></p>
-<p>如图，把项目原来的 <code>META-INF</code> 添加进去就行了。图中三个文件，第二个文件 <code>plugin.xml</code> 应该是<code>macOS</code> 版的配置文件，第三个显然是<code>windows</code>版的。</p>
-<p>上面 <code>Output directory</code> 是<code>jar</code>包的输出路径</p>
-</li>
-<li><p>给插件添加一个选项，光标跳到字符前面OR后面</p>
-<p><img src="../image/post-04-07.png" alt="post-04-07"></p>
-<p><img src="../image/post-04-08.png" alt="post-04-08"></p>
-<p><img src="../image/post-04-09.png" alt="post-04-09"></p>
-<p><img src="../image/post-04-10.png" alt="post-04-10"></p>
-<p>其实就是照葫芦画瓢，<code>idea</code>对这方面的支持也很好，很好上手。</p>
-</li>
-<li><p>然后是代码逻辑的修改，修改<code>JumpRunnable</code> 这个类就可以了</p>
-<p>修改前：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> org.hunmr.acejump.runnable;</div><div class="line"></div><div class="line"><span class="keyword">import</span> org.hunmr.acejump.AceJumpAction;</div><div class="line"><span class="keyword">import</span> org.hunmr.acejump.marker.JOffset;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JumpRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> JOffset _offsetToJump;</div><div class="line">    <span class="keyword">private</span> AceJumpAction _action;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JumpRunnable</span><span class="params">(JOffset _offsetToJump, AceJumpAction _action)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>._offsetToJump = _offsetToJump;</div><div class="line">        <span class="keyword">this</span>._action = _action;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        _offsetToJump.editor.getContentComponent().requestFocus();</div><div class="line">        _offsetToJump.editor.getCaretModel().moveToOffset(_offsetToJump.offset);</div><div class="line">        _offsetToJump.editor.getSelectionModel().removeSelection();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>修改后：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> org.hunmr.acejump.runnable;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.intellij.openapi.components.ServiceManager;</div><div class="line"><span class="keyword">import</span> com.intellij.openapi.editor.Document;</div><div class="line"><span class="keyword">import</span> org.hunmr.acejump.AceJumpAction;</div><div class="line"><span class="keyword">import</span> org.hunmr.acejump.marker.JOffset;</div><div class="line"><span class="keyword">import</span> org.hunmr.options.PluginConfig;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JumpRunnable</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> JOffset _offsetToJump;</div><div class="line">    <span class="keyword">private</span> AceJumpAction _action;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> PluginConfig _config = ServiceManager.getService(PluginConfig.class);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JumpRunnable</span><span class="params">(JOffset _offsetToJump, AceJumpAction _action)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>._offsetToJump = _offsetToJump;</div><div class="line">        <span class="keyword">this</span>._action = _action;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        _offsetToJump.editor.getContentComponent().requestFocus();</div><div class="line">        <span class="keyword">if</span> (_config._jumpBehind &amp;&amp; !isLineEndOrLineStartOffset(_offsetToJump.offset)) &#123;</div><div class="line">            _offsetToJump.editor.getCaretModel().moveToOffset(_offsetToJump.offset + <span class="number">1</span>);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            _offsetToJump.editor.getCaretModel().moveToOffset(_offsetToJump.offset);</div><div class="line">        &#125;</div><div class="line">        _offsetToJump.editor.getSelectionModel().removeSelection();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">  	* 判断是不是在行首或行尾，如果是，offset不需要增1</div><div class="line">  	*/</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isLineEndOrLineStartOffset</span><span class="params">(<span class="keyword">int</span> offset)</span> </span>&#123;</div><div class="line">        Document _document = _offsetToJump.editor.getDocument();</div><div class="line">        <span class="keyword">int</span> lineNumber = _document.getLineNumber(offset);</div><div class="line">        <span class="keyword">int</span> lineStartOffset = _document.getLineStartOffset(lineNumber);</div><div class="line">        <span class="keyword">int</span> lineEndOffset = _document.getLineEndOffset(lineNumber);</div><div class="line">        <span class="keyword">return</span> lineEndOffset == _offsetToJump.offset || lineStartOffset == _offsetToJump.offset;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p><code>_config._jumpBehind</code> 是上一步添加的单选框的值，单选框打上勾就是 <code>true</code> </p>
-</li>
-<li><p>打包可以用 <code>Build</code> -&gt; <code>Build Artifacts...</code> -&gt; <code>Action</code> -&gt; <code>Build</code> </p>
-</li>
-<li><p>完了之后就可以去输出目录找到<code>jar</code>包安装了</p>
-</li>
-</ul>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><p>​    作者没有写注释的习惯，整个项目注释不超过五行，代码理解逻辑理解起来还是有点费劲。修改过后，插件的其他功能没有测试，我只用这一个功能[/doge]</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017-06-04-post-04-修改emacIDEAs插件.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
