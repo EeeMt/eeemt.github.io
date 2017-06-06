@@ -64,17 +64,17 @@
 
 
 
-<meta name="description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下： 1234@Action(value = &quot;demo&quot;, results = &amp;#123;@Result(typ">
+<meta name="description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下：">
 <meta name="keywords" content="Coding">
 <meta property="og:type" content="article">
 <meta property="og:title" content="struts2 用注解配置 excludeNullProperties">
 <meta property="og:url" content="http://eeemt.site/2017-06-06-post-05-struts2-用注解配置-excludeNullProperties.html">
 <meta property="og:site_name" content="EeeMt">
-<meta property="og:description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下： 1234@Action(value = &quot;demo&quot;, results = &amp;#123;@Result(typ">
-<meta property="og:updated_time" content="2017-06-06T13:30:27.985Z">
+<meta property="og:description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下：">
+<meta property="og:updated_time" content="2017-06-06T13:31:59.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="struts2 用注解配置 excludeNullProperties">
-<meta name="twitter:description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下： 1234@Action(value = &quot;demo&quot;, results = &amp;#123;@Result(typ">
+<meta name="twitter:description" content="用Json返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而Json中这个字段值为Null，结果是先前的值被清空。想要转换json（`struts2的json插件）的时候用注解排除值为null的字段，百度+Google，只找到了xml的相关配置。自己研究，结果如下：">
 
 
 
@@ -355,6 +355,7 @@
 
       
         <p>用<code>Json</code>返回数据，然后填充表单，表单中某些输入项可能已经有值了，填充会覆盖之，而<code>Json</code>中这个字段值为<code>Null，</code>结果是先前的值被清空。<br>想要转换<code>json</code>（<code>`struts2</code>的<code>json</code>插件）的时候用注解排除值为<code>null</code>的字段，百度+Google，只找到了xml的相关配置。<br>自己研究，结果如下：</p>
+<a id="more"></a>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Action</span>(value = <span class="string">"demo"</span>, results = &#123;<span class="meta">@Result</span>(type = <span class="string">"json"</span>,params = &#123;<span class="string">"excludeNullProperties"</span>,<span class="string">"true"</span>&#125;)&#125;)</div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">demo</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>其中<code>params = {&quot;excludeNullProperties&quot;,&quot;true&quot;}</code> ，不是等号也不是括号里赋值，就是按顺序匹配键值对，相当于：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">result</span> <span class="attr">type</span>=<span class="string">"json"</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"excludeNullProperties"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;/<span class="name">result</span>&gt;</span></div></pre></td></tr></table></figure>
