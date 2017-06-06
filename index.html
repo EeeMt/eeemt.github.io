@@ -315,7 +315,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  159
+                  180
                 </span>
               
 
@@ -355,7 +355,8 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Action</span>(value = <span class="string">"demo"</span>, results = &#123;<span class="meta">@Result</span>(type = <span class="string">"json"</span>,params = &#123;<span class="string">"excludeNullProperties"</span>,<span class="string">"true"</span>&#125;)&#125;)</div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">demo</span><span class="params">()</span></span>&#123;</div><div class="line">  <span class="keyword">return</span> SUCCESS;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>其中<code>params = {&quot;excludeNullProperties&quot;,&quot;true&quot;}</code> ，不是等号也不是括号里赋值，就是按顺序匹配键值对，相当于：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">result</span> <span class="attr">type</span>=<span class="string">"json"</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">param</span> <span class="attr">name</span>=<span class="string">"excludeNullProperties"</span>&gt;</span>true<span class="tag">&lt;/<span class="name">param</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;/<span class="name">result</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>中的<code>&lt;param name=&quot;excludeNullProperties&quot;&gt;true&lt;/param&gt;</code> </p>
+<p>中的<code>&lt;param name=&quot;excludeNullProperties&quot;&gt;true&lt;/param&gt;</code> 。</p>
+<p>同理：其他以前用<code>xml</code>配置在<code>result</code>里的配置都可以这样配。</p>
 
           
         
